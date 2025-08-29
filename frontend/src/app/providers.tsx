@@ -1,12 +1,11 @@
-// frontend/app/providers.tsx
-"use client"; // This is a client component
+// frontend/src/app/providers.tsx
+"use client";
 
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 
-// Create the Wagmi config
 const config = createConfig(
   getDefaultConfig({
     appName: "Pump Clone",

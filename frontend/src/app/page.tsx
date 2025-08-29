@@ -1,12 +1,11 @@
-// frontend/app/page.tsx
+// frontend/src/app/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useWriteContract } from "wagmi";
 import Link from "next/link";
-import factoryAbi from "../../backend/abi/MemeCoinFactory.json"; // Adjust path if needed
+import factoryAbi from "@/abi/MemeCoinFactory.json";
 
-// Define the type for a coin object
 interface Coin {
   name: string;
   symbol: string;
@@ -21,11 +20,11 @@ export default function Home() {
   const [coins, setCoins] = useState<Coin[]>([]);
   const { writeContract, isPending } = useWriteContract();
 
-  // This hook fetches the list of coins from your API when the page loads
   useEffect(() => {
     async function fetchCoins() {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/coins`);
+        if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setCoins(data);
       } catch (error) {
@@ -35,7 +34,6 @@ export default function Home() {
     fetchCoins();
   }, []);
 
-  // This function handles the form submission to create a new coin
   const createCoin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -45,7 +43,6 @@ export default function Home() {
 
     if (!name || !symbol || !uri) return;
 
-    // Call the 'createCoin' function on your smart contract
     writeContract({
       abi: factoryAbi.abi,
       address: FACTORY_ADDRESS,
@@ -55,56 +52,52 @@ export default function Home() {
   };
 
   return (
-    <div className="p-8">
-      {/* Coin Creation Section */}
-      <div className="mb-12 p-6 border rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold mb-4">🚀 Launch a New Coin</h2>
-        <form onSubmit={createCoin} className="flex flex-col gap-4">
-          <input
-            name="name"
-            placeholder="Token Name (e.g., Doge)"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            name="symbol"
-            placeholder="Token Symbol (e.g., DOGE)"
-            className="input input-bordered w-full"
-            required
-          />
-          <input
-            name="uri"
-            placeholder="Image URI (e.g., https://.../image.png)"
-            className="input input-bordered w-full"
-            required
-          />
-          <button type="submit" className="btn btn-primary" disabled={isPending}>
-            {isPending ? "Creating..." : "Create Coin"}
-          </button>
-        </form>
-      </div>
+    <div className="relative overflow-hidden">
+      <div className="grid"></div> {/* Background grid effect */}
 
-      {/* Coin List Section */}
-      <div>
-        <h2 className="text-2xl font-semibold mb-4">🪙 Available Coins</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {coins.map((coin) => (
-            <Link href={`/${coin.bonding_curve_address}`} key={coin.token_address}>
-              <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-                <figure className="px-10 pt-10">
-                  <img
-                    src={coin.token_uri}
-                    alt={coin.name}
-                    className="rounded-xl w-24 h-24 object-cover"
-                  />
-                </figure>
-                <div className="card-body items-center text-center">
-                  <h3 className="card-title">{coin.name}</h3>
-                  <p>${coin.symbol}</p>
+      <div className="p-8">
+        {/* Coin Creation Section */}
+        <div className="mb-12 p-6 max-w-md mx-auto">
+          <h2 className="text-3xl font-semibold mb-6 text-center text-white">🚀 Launch a New Coin</h2>
+          <form onSubmit={createCoin} className="flex flex-col gap-6 items-center">
+            {/* Styled Inputs */}
+            <div className="input-container">
+              <div className="input-glow-container input-glow-white"></div>
+              <input name="name" placeholder="Token Name (e.g., Doge)" className="input" required />
+            </div>
+            <div className="input-container">
+              <div className="input-glow-container input-glow-white"></div>
+              <input name="symbol" placeholder="Token Symbol (e.g., DOGE)" className="input" required />
+            </div>
+            <div className="input-container">
+              <div className="input-glow-container input-glow-white"></div>
+              <input name="uri" placeholder="Image URI (e.g., https://...)" className="input" required />
+            </div>
+            {/* Styled Button */}
+            <button type="submit" className="button mt-2" disabled={isPending}>
+              <span>{isPending ? "Creating..." : "Create Coin"}</span>
+              <div className="button-overlay"></div>
+            </button>
+          </form>
+        </div>
+
+        {/* Coin List Section */}
+        <div>
+          <h2 className="text-3xl font-semibold mb-8 text-center text-white">🪙 Available Coins</h2>
+          <div className="flex flex-wrap items-center justify-center gap-8">
+            {coins.map((coin) => (
+              <Link href={`/${coin.bonding_curve_address}`} key={coin.token_address} className="no-underline">
+                {/* Styled Card */}
+                <div className="card">
+                  <div className="content">
+                    <img src={coin.token_uri} alt={coin.name} className="w-24 h-24 rounded-full object-cover border-2 border-gray-500" />
+                    <p className="text-xl font-bold">{coin.name}</p>
+                    <p className="text-lg text-gray-400">${coin.symbol}</p>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </div>
