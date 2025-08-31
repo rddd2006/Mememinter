@@ -1,4 +1,5 @@
 // backend/indexer.js
+require('dotenv').config();
 const ethers = require('ethers');
 const db = require('./db');
 // Import ABIs from our new abi folder

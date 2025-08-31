@@ -1,4 +1,5 @@
 // backend/server.js
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const db = require('./db'); // Import our database connection module
@@ -19,6 +20,24 @@ app.get('/api/coins', async (req, res) => {
         res.json(rows);
     } catch (err) {
         console.error("Error fetching coins:", err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+app.get('/api/coins/:curveAddress', async (req, res) => {
+    const { curveAddress } = req.params;
+    try {
+        const { rows } = await db.query(
+            'SELECT * FROM coins WHERE bonding_curve_address = $1',
+            [curveAddress]
+        );
+        // rows is an array, but we only expect one result
+        if (rows.length > 0) {
+            res.json(rows[0]);
+        } else {
+            res.status(404).json({ error: 'Coin not found' });
+        }
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
@@ -43,4 +62,26 @@ app.get('/api/trades/:curveAddress', async (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`API server is running on port ${PORT}`);
+});
+/**
+ * API Endpoint: GET /api/coins/:curveAddress
+ * Fetches details for a single coin by its bonding curve address.
+ */
+app.get('/api/coins/:curveAddress', async (req, res) => {
+    const { curveAddress } = req.params;
+    try {
+        const { rows } = await db.query(
+            'SELECT * FROM coins WHERE bonding_curve_address = $1',
+            [curveAddress]
+        );
+        // rows is an array, but we only expect one result
+        if (rows.length > 0) {
+            res.json(rows[0]);
+        } else {
+            res.status(404).json({ error: 'Coin not found' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });

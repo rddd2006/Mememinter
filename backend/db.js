@@ -1,15 +1,21 @@
 // backend/db.js
 const { Pool } = require('pg');
 
-const pool = new Pool({
-  // This connection string will be provided by Vercel in the deployment environment.
-  connectionString: process.env.POSTGRES_URL, 
-  ssl: {
-    rejectUnauthorized: false // This is required to connect to Vercel Postgres.
-  }
-});
+// Start with the base configuration using the connection string
+const config = {
+  connectionString: process.env.POSTGRES_URL,
+};
+
+// Only add the SSL configuration if we are NOT connecting to a local database.
+// Vercel Postgres URLs do not contain "localhost".
+if (process.env.POSTGRES_URL && !process.env.POSTGRES_URL.includes("localhost")) {
+  config.ssl = {
+    rejectUnauthorized: false,
+  };
+}
+
+const pool = new Pool(config);
 
 module.exports = {
-  // We export a query function that uses the connection pool.
   query: (text, params) => pool.query(text, params),
 };
