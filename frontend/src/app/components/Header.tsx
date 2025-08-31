@@ -9,10 +9,11 @@ export function Header() {
     <header className="flex items-center justify-between p-4 border-b">
       {/* Link to the homepage */}
       <Link href="/" className="text-2xl font-bold">
-        Pump Clone
+        MemeMinter
       </Link>
       {/* Wallet connection button from ConnectKit */}
       <ConnectKitButton />
     </header>
   );
 }
+
