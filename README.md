@@ -136,26 +136,7 @@ You will need three separate terminals.
 
 ---
 
-## ☁️ Deployment
 
-Follow these steps to deploy the application to a live environment.
-
-1.  **Smart Contracts**: Deploy your contracts to Sepolia and save the factory address.
-2.  **Frontend & API (Vercel)**:
-    -   Push your project to GitHub.
-    -   Create a new project on Vercel and link the repository.
-    -   Create a Vercel Postgres database from the **Storage** tab.
-    -   Run the `CREATE TABLE` SQL in the database's **Query** tab.
-    -   Set production environment variables in the Vercel project settings.
-    -   Ensure your `vercel.json` file is configured for a monorepo.
-3.  **Indexer (Worker Service)**:
-    -   Choose a hosting provider (e.g., Render, Koyeb).
-    -   Create a new "Background Worker" service.
-    -   Set the **Root Directory** to `backend` and **Start Command** to `node indexer.js`.
-    -   Add your production environment variables (`FACTORY_ADDRESS`, `POSTGRES_URL` from Vercel, and `RPC_URL`).
-    -   Launch the service.
-
----
 
 ## ⚠️ Disclaimer
 
