@@ -1,4 +1,4 @@
-#  MemeMinter - Meme Coin Launchpad 🚀
+in#  MemeMinter - Meme Coin Launchpad 🚀
 
 > A full-stack decentralized application that allows users to create, launch, and trade their own ERC-20 meme coins on the Sepolia testnet. The platform features a bonding curve for initial trading that automatically transitions to a Uniswap V2 liquidity pool once a market cap target is reached.
 
@@ -141,3 +141,4 @@ You will need three separate terminals.
 ## ⚠️ Disclaimer
 
 > This is an educational project and is **not audited for security**. The smart contracts are simplified for learning purposes. Do not use this code with real funds on the Ethereum mainnet.
+https://drive.google.com/drive/folders/1kxQnQ0jjy3TAhoCDafO44uEbDpo--riZ
